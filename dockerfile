@@ -22,7 +22,7 @@ RUN apk add --no-cache --update \
     libjpeg-turbo-dev \
     libwebp-dev \
     libxml2-dev \
-    libzip-dev \  
+    libzip-dev \
     icu-dev \
     freetype-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
@@ -30,9 +30,12 @@ RUN apk add --no-cache --update \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm -rf /var/cache/apk/*
 
-COPY composer.json composer.lock ./
+# # Add composer
+# COPY composer.json composer.lock ./
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER}
+
+# Copy application files
+COPY . .
 
 # Install Composer dependencies
 RUN composer install \
@@ -40,26 +43,21 @@ RUN composer install \
     --no-plugins \
     --no-scripts \
     --no-dev \
-    --prefer-dist
-
-COPY . .
-RUN composer dump-autoload --no-scripts 
+    --prefer-dist\
+    --optimize-autoloader
 
 # Create user and set permissions
 RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER} \
-    && chown -R ${USER}:${GROUP_NAME} /home/${USER} \
-    && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}\
-    && chmod -R 775 storage bootstrap/cache/* 
+    && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT} \
+    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache
 
 # Set up Nginx configuration (if needed)
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/local.ini "$PHP_INI_DIR/local.ini"
 
-# Set the correct permissions for writable directories
-RUN chmod -R 775 storage bootstrap/cache \
-    && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}
-
 # Expose the port that Nginx will use
 EXPOSE 3000
+
+# Entrypoint and user setup
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 USER ${USER}
