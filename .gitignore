@@ -2,6 +2,7 @@
 /public/uploads/
 /storage/logs/*
 /vendor
+/vendor.bkp
 .env
 .env.backup
 .phpunit.result.cache

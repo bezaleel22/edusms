@@ -1,0 +1,51 @@
+# Ignore the Dockerfile itself
+Dockerfile
+
+# Ignore Docker Compose files
+docker-compose.yml
+docker-compose.override.yml
+
+# Ignore environment variable files
+.env
+.env.local
+.env.testing
+.env.production
+
+# Ignore composer.lock and vendor directory if you want to build them in Docker
+/vendor
+
+# Ignore node modules if using Node.js for assets
+node_modules
+
+# Ignore logs and caches
+storage/*.log
+storage/framework/*
+storage/logs/*
+storage/temp/*
+storage/sessions/*
+storage/views/*
+bootstrap/cache/*
+
+# Ignore IDE and editor files
+.idea
+.vscode
+*.swp
+*.swo
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore tests
+tests/
+phpunit.xml
+phpunit.xml.dist
+
+# Ignore documentation
+docs/
+README.md
+
+# Ignore any other unnecessary files or directories
+*.bak
+*.tmp
+*.temp

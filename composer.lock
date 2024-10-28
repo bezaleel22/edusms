@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3a2cea179039c1ad4a66b68071026a7",
+    "content-hash": "ea95e8ddffd9293f5ab022a27dd52a6b",
     "packages": [
         {
             "name": "africastalking/africastalking",
@@ -1817,30 +1817,32 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.9.2",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e"
+                "reference": "d0190b156bcca848d401fb80f31f504f37141c8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
-                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/d0190b156bcca848d401fb80f31f504f37141c8d",
+                "reference": "d0190b156bcca848d401fb80f31f504f37141c8d",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0"
+                "php": ">=5.3.3"
             },
             "require-dev": {
-                "ext-intl": "*",
-                "phpunit/phpunit": "^4.8.35 || ^5.7",
-                "squizlabs/php_codesniffer": "^2.9.2"
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "suggest": {
+                "ext-intl": "*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.5.x-dev"
                 }
             },
             "autoload": {
@@ -1865,10 +1867,10 @@
             ],
             "support": {
                 "issues": "https://github.com/fzaninotto/Faker/issues",
-                "source": "https://github.com/fzaninotto/Faker/tree/v1.9.2"
+                "source": "https://github.com/fzaninotto/Faker/tree/master"
             },
             "abandoned": true,
-            "time": "2020-12-11T09:56:16+00:00"
+            "time": "2015-05-29T06:29:14+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -6563,27 +6565,27 @@
         },
         {
             "name": "renatomarinho/laravel-page-speed",
-            "version": "1.9.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/renatomarinho/laravel-page-speed.git",
-                "reference": "7639014cde1bbb8dbe3e22be6ff92bee00671625"
+                "reference": "ac71e0aa2882bfc10d170dc67e591216d02ab859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/renatomarinho/laravel-page-speed/zipball/7639014cde1bbb8dbe3e22be6ff92bee00671625",
-                "reference": "7639014cde1bbb8dbe3e22be6ff92bee00671625",
+                "url": "https://api.github.com/repos/renatomarinho/laravel-page-speed/zipball/ac71e0aa2882bfc10d170dc67e591216d02ab859",
+                "reference": "ac71e0aa2882bfc10d170dc67e591216d02ab859",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "5.3.* || 5.4.* || 5.5.* || 5.6.* || 5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
-                "php": "^5.6 || ^7.0"
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+                "php": "^8.0"
             },
             "require-dev": {
-                "mockery/mockery": ">=0.9.4",
-                "orchestra/testbench": "^3.2",
-                "phpunit/phpunit": "^5.7 || ^6.0 || ^7.0 || ^8.0",
-                "squizlabs/php_codesniffer": "^2.3"
+                "mockery/mockery": "^1.4",
+                "orchestra/testbench": "^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "phpunit/phpunit": "^8.5 || ^9.0",
+                "squizlabs/php_codesniffer": "^3.6"
             },
             "type": "library",
             "extra": {
@@ -6618,9 +6620,9 @@
             ],
             "support": {
                 "issues": "https://github.com/renatomarinho/laravel-page-speed/issues",
-                "source": "https://github.com/renatomarinho/laravel-page-speed/tree/1.9.0"
+                "source": "https://github.com/renatomarinho/laravel-page-speed/tree/2.1.0"
             },
-            "time": "2020-09-14T03:32:38+00:00"
+            "time": "2022-03-14T18:28:48+00:00"
         },
         {
             "name": "rennokki/laravel-eloquent-query-cache",
@@ -12952,5 +12954,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
