@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Validators;
+namespace Modules\CustomField\Validators;
 
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;

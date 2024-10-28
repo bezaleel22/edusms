@@ -32,6 +32,7 @@ RUN apk add --no-cache --update \
 
 COPY composer.json composer.lock ./
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER}
 
 # Install Composer dependencies
 RUN composer install \
@@ -39,17 +40,16 @@ RUN composer install \
     --no-plugins \
     --no-scripts \
     --no-dev \
-    --prefer-dist \
-    --optimize-autoloader
+    --prefer-dist
 
 COPY . .
+RUN composer dump-autoload --no-scripts 
 
 # Create user and set permissions
 RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER} \
-    && mkdir -p /home/${USER}/.composer \
     && chown -R ${USER}:${GROUP_NAME} /home/${USER} \
     && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}\
-    && chmod -R 775 storage bootstrap/cache 
+    && chmod -R 775 storage bootstrap/cache/* 
 
 # Set up Nginx configuration (if needed)
 COPY docker/default.conf /etc/nginx/conf.d/default.conf
@@ -61,9 +61,5 @@ RUN chmod -R 775 storage bootstrap/cache \
 
 # Expose the port that Nginx will use
 EXPOSE 3000
-
-# Set the entry point
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-# Use non-root user
 USER ${USER}
