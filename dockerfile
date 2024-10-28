@@ -1,5 +1,5 @@
 # Build Stage
-FROM php:8.2-fpm-alpine AS builder
+FROM php:8.1-fpm-alpine AS builder
 
 # Copy Composer from the Composer image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -27,7 +27,7 @@ RUN composer install \
     && php artisan key:generate
 
 # Final Stage
-FROM php:8.2-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 # Define environment variables
 ENV WORKDIR=/var/www/html
@@ -83,7 +83,7 @@ COPY --from=builder /var/www/html /var/www/html
 # Set the correct permissions
 RUN chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}
 
-EXPOSE 80
+EXPOSE 3000
 
 # Set the entry point
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
