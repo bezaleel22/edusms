@@ -46,16 +46,17 @@ RUN composer install \
     --prefer-dist\
     --optimize-autoloader
 
+# Set up Nginx configuration (if needed)
+COPY docker/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/local.ini "$PHP_INI_DIR/local.ini"
+
 # Create user and set permissions
 RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER} \
     && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT} \
     && find . -type d -exec chmod 775 {} \; \
     && find . -type f -exec chmod 664 {} \; \
-    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache ${DOCUMENT_ROOT}/public/uploads
-
-# Set up Nginx configuration (if needed)
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/local.ini "$PHP_INI_DIR/local.ini"
+    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache ${DOCUMENT_ROOT}/public/uploads \
+    && chmod +x docker/entrypoint.sh
 
 # Expose the port that Nginx will use
 EXPOSE 3000
