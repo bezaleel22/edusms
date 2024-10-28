@@ -1,0 +1,24 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    command: --skip-grant-tables
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: paxxw0rd@2791
+      MYSQL_DATABASE: edusms
+      MYSQL_USER: lla
+      MYSQL_PASSWORD: paxxw0rd@2791
+      
+  adminer:
+    depends_on:
+      - mariadb
+    image: adminer
+    container_name: adminer
+    restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    ports:
+      - 8082:8080
