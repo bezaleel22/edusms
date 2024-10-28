@@ -69,8 +69,8 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Set up Nginx and PHP configuration
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY ./local.ini "$PHP_INI_DIR/local.ini"
+COPY docker/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/local.ini "$PHP_INI_DIR/local.ini"
 
 # Set working directory
 WORKDIR ${DOCUMENT_ROOT}
