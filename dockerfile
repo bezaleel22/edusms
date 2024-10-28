@@ -59,5 +59,5 @@ COPY docker/local.ini "$PHP_INI_DIR/local.ini"
 EXPOSE 3000
 
 # Entrypoint and user setup
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["docker/entrypoint.sh"]
 USER ${USER}
