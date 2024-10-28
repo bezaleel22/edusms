@@ -1,0 +1,15 @@
+services:
+  edusms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edusms
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mariadb
+    ports:
+      - 3022:3000
