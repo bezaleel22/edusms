@@ -17,10 +17,13 @@ RUN composer install \
     --no-scripts \
     --no-dev \
     --prefer-dist \
+    --optimize-autoloader \
     && composer dump-autoload --no-scripts \
+    # Set proper permissions for files and directories
     && find . -type f -exec chmod 644 {} \; \
-    && find . -type d -exec chmod 775 {} \; \
-    && chmod -R 777 storage bootstrap/cache/ \
+    && find . -type d -exec chmod 755 {} \; \
+    # Ensure writable permissions for storage and cache directories
+    && chmod -R 775 storage bootstrap/cache/ \
     && php artisan route:clear \
     && php artisan config:clear \
     && php artisan cache:clear \
@@ -38,8 +41,7 @@ ENV UID=1000
 ENV GROUP_NAME=www-data
 
 # Install necessary packages and PHP extensions
-RUN apk update && \
-    apk add --no-cache \
+RUN apk add --no-cache --update \
     nginx \
     curl \
     zip \
@@ -51,13 +53,9 @@ RUN apk update && \
     libxml2-dev \
     icu-dev \
     freetype-dev \
-    # Install PHP extensions
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql bcmath mysqli opcache zip intl \
-    && docker-php-source delete \
-    # Move to production php.ini
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
-    # Clean up
     && rm -rf /var/cache/apk/*
 
 # Create user and set permissions
@@ -70,7 +68,7 @@ RUN addgroup -g ${UID} ${GROUP_NAME} \
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Set up Nginx and php configuration (make sure this file exists and is properly configured)
+# Set up Nginx and PHP configuration
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY ./local.ini "$PHP_INI_DIR/local.ini"
 
@@ -80,8 +78,9 @@ WORKDIR ${DOCUMENT_ROOT}
 # Copy application files and vendor directory from the build stage
 COPY --from=builder /var/www/html /var/www/html
 
-# Set the correct permissions
-RUN chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}
+# Set the correct permissions for writable directories
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT}
 
 EXPOSE 3000
 
