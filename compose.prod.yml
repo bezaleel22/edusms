@@ -9,7 +9,11 @@ services:
       - .env
     volumes:
       - .:/var/www/html
-    depends_on:
-      - mariadb
     ports:
       - 3022:3000
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
