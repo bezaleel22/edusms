@@ -6,10 +6,10 @@ docker-compose.yml
 docker-compose.override.yml
 
 # Ignore environment variable files
-.env
-.env.local
-.env.testing
-.env.production
+# .env
+# .env.local
+# .env.testing
+# .env.production
 
 # Ignore composer.lock and vendor directory if you want to build them in Docker
 /vendor

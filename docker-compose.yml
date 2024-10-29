@@ -29,6 +29,9 @@ services:
       dockerfile: Dockerfile
     container_name: edusms
     restart: unless-stopped
+    environment:
+      PHP_UPLOAD_MAX_FILESIZE: 100M
+      PHP_POST_MAX_SIZE: 120M
     env_file:
       - .env
     volumes:

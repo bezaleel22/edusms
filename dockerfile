@@ -1,17 +1,11 @@
-# Use the PHP 8.1 FPM Alpine image as the base
-FROM php:8.1-fpm-alpine
-
-# Define environment variables
+FROM webdevops/php-nginx:8.1-alpine
 ENV DOCUMENT_ROOT=/var/www/html
-ENV LARAVEL_PROCS_NUMBER=1
-ENV USER=www
-ENV UID=1000
-ENV GROUP_NAME=www-data
+ENV WEB_DOCUMENT_ROOT ${DOCUMENT_ROOT}/public
+ENV PHP_DISMOD=bz2,calendar,exiif,ffi,intl,gettext,ldap,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,apcu,vips,yaml,mongodb,amqp
 
-# Set the working directory
+ENV APP_ENV production
 WORKDIR ${DOCUMENT_ROOT}
 
-# Install necessary packages and PHP extensions
 RUN apk add --no-cache --update \
     nginx \
     curl \
@@ -30,14 +24,10 @@ RUN apk add --no-cache --update \
     && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm -rf /var/cache/apk/*
 
-# # Add composer
-# COPY composer.json composer.lock ./
+# Copy Composer binary from the Composer official Docker image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copy application files
 COPY . .
 
-# Install Composer dependencies
 RUN composer install \
     --no-interaction \
     --no-plugins \
@@ -46,21 +36,7 @@ RUN composer install \
     --prefer-dist\
     --optimize-autoloader
 
-# Set up Nginx configuration (if needed)
-COPY docker/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/local.ini "$PHP_INI_DIR/local.ini"
-
-# Create user and set permissions
-RUN adduser -u ${UID} -G ${GROUP_NAME} -s /bin/sh -D ${USER} \
-    && chown -R ${USER}:${GROUP_NAME} ${DOCUMENT_ROOT} \
-    && find . -type d -exec chmod 775 {} \; \
-    && find . -type f -exec chmod 664 {} \; \
-    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache ${DOCUMENT_ROOT}/public/uploads \
-    && chmod +x docker/entrypoint.sh
-
-# Expose the port that Nginx will use
-EXPOSE 3000
-
-# Entrypoint and user setup
-ENTRYPOINT ["docker/entrypoint.sh"]
-USER ${USER}
+RUN && chown -R application:application . \
+    && find . -type d -exec chmod 755 {} \; \
+    && find . -type f -exec chmod 644 {} \; \
+    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache ${DOCUMENT_ROOT}/public/uploads \   
