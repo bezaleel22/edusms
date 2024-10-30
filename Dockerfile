@@ -28,7 +28,8 @@ RUN apk add --no-cache --update \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY --chown=application:application . .
 USER application
-RUN touch .env && chown application:application .env
+RUN echo "API_KEY=" > .env && \
+    chown application:application .env
 
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
     && chmod -R 775 storage bootstrap/cache \
