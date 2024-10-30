@@ -1,6 +1,6 @@
 FROM webdevops/php-nginx:8.1-alpine
 ENV DOCUMENT_ROOT=/var/www/html
-ENV WEB_DOCUMENT_ROOT ${DOCUMENT_ROOT}/public
+ENV WEB_DOCUMENT_ROOT ${DOCUMENT_ROOT}
 ENV PHP_DISMOD=bz2,calendar,exiif,ffi,intl,gettext,ldap,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,apcu,vips,yaml,mongodb,amqp
 
 ENV APP_ENV production
@@ -26,17 +26,8 @@ RUN apk add --no-cache --update \
 
 # Copy Composer binary from the Composer official Docker image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-COPY . .
+COPY --chown=application:application . .
+USER application
 
-RUN composer install \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --no-dev \
-    --prefer-dist\
-    --optimize-autoloader
-
-RUN chown -R application:application . \
-    && find . -type d -exec chmod 755 {} \; \
-    && find . -type f -exec chmod 644 {} \; \
-    && chmod -R 775 ${DOCUMENT_ROOT}/storage ${DOCUMENT_ROOT}/bootstrap/cache ${DOCUMENT_ROOT}/public/uploads \   
+RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
+    && chmod -R 775 storage bootstrap/cache
