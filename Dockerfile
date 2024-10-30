@@ -29,5 +29,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY --chown=application:application . .
 USER application
 
-RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
+RUN touch .env \
+    && composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
     && chmod -R 775 storage bootstrap/cache
