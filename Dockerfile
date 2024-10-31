@@ -3,7 +3,6 @@ ENV DOCUMENT_ROOT=/var/www/html
 ENV WEB_DOCUMENT_ROOT ${DOCUMENT_ROOT}
 ENV PHP_DISMOD=bz2,calendar,exiif,ffi,intl,gettext,ldap,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,apcu,vips,yaml,mongodb,amqp
 
-ENV APP_ENV production
 WORKDIR ${DOCUMENT_ROOT}
 
 RUN apk add --no-cache --update \
@@ -31,5 +30,5 @@ USER application
 
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
     && chmod -R 775 storage bootstrap/cache \
-    && php artisan key:generate \
+    && php artisan key:generate --force \
     && php artisan config:cache
