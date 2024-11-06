@@ -1,29 +1,11 @@
 FROM webdevops/php-nginx:8.1-alpine
-ENV DOCUMENT_ROOT=/var/www/html
+ENV DOCUMENT_ROOT=/app
 ENV WEB_DOCUMENT_ROOT ${DOCUMENT_ROOT}
-ENV PHP_DISMOD=bz2,calendar,exiif,ffi,intl,gettext,ldap,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,apcu,vips,yaml,mongodb,amqp
+ENV PHP_DISMOD=bz2,exiif,ffi,gettext,ldap,imap,pdo_pgsql,pgsql,soap,sockets,sysvmsg,sysvsm,sysvshm,shmop,apcu,vips,yaml,mongodb,amqp
 
 WORKDIR ${DOCUMENT_ROOT}
+RUN echo post_max_size = 120M >> /opt/docker/etc/php/php.ini
 
-RUN apk add --no-cache --update \
-    nginx \
-    curl \
-    zip \
-    unzip \
-    shadow \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    libxml2-dev \
-    libzip-dev \
-    icu-dev \
-    freetype-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql bcmath mysqli opcache zip intl \
-    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
-    && rm -rf /var/cache/apk/*
-
-# Copy Composer binary from the Composer official Docker image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY --chown=application:application . .
 USER application
@@ -31,4 +13,8 @@ USER application
 RUN composer install --no-interaction --no-plugins --no-scripts --no-dev --prefer-dist --optimize-autoloader \
     && chmod -R 775 storage bootstrap/cache \
     && php artisan key:generate --force \
-    && php artisan config:cache
+    && php artisan view:clear \
+    && php artisan cache:clear \
+    && php artisan route:clear \
+    && php artisan config:clear \
+    && php artisan app:setup 
