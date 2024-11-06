@@ -2,11 +2,7 @@
 /vendor/
 /node_modules/
 .env
-.env.local
-.env.testing
-.env.production
 .env.*.backup
-change-list.txt
 
 # Laravel specific directories
 /storage/*.key
@@ -23,8 +19,6 @@ change-list.txt
 /public/hot
 /public/storage
 /public/mix-manifest.json
-/public/css/*.css
-/public/js/*.js
 /public/build/
 
 # Ignore npm/Yarn files
